@@ -1,0 +1,39 @@
+$cardHeaderColour: green;
+$cardHeaderFontColour: white;
+$cardColour: white;
+$cardFontColour: white;
+$cardBodyColour: rgb(170, 235, 170);
+$cardBodyFontColour: black;
+$cardFooterColour: green;
+$cardFooterFontColour: white;
+$cardBorderColour: black;
+
+.cardMain {
+    background-color: $cardColour;
+    color: $cardFontColour;
+    width:33%;
+    height:auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: $cardBorderColour;
+    margin:auto;
+}
+
+.cardHeader {
+    background-color: $cardHeaderColour;
+    color: $cardHeaderFontColour;
+    height:10%;
+}
+
+.cardBody {
+    background-color: $cardBodyColour;
+    color: $cardBodyFontColour;
+    height:80%;
+}
+
+.cardFooter {
+    height:10%;
+    background-color: $cardFooterColour;
+    color: $cardFooterFontColour;
+    font-size: 0.75rem;
+}

@@ -1,0 +1,30 @@
+.cardMain {
+    background-color: white;
+    color: black;
+    width:66%;
+    height:auto;
+    border-width: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 5px 5px 5px 5px;
+    margin:auto;
+}
+
+.cardHeader {
+    background-color: green;
+    color: white;
+    height:10%;
+}
+
+.cardBody {
+    background-color: rgb(170, 235, 170);
+    color: black;
+    height:85%;
+}
+
+.cardFooter {
+    height:1%;
+    background-color: green;
+    color: white;
+    font-size: 0.75rem;
+}
