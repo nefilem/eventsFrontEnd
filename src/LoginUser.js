@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 //import ToggleButton from 'react-bootstrap/ToggleButton';
 //import ButtonGroup from 'react-bootstrap/ButtonGroup';
 //import InputGroup from 'react-bootstrap/InputGroup';
@@ -10,9 +11,11 @@ import 'toastr/build/toastr.min.css';
 //import womanimage from './images/womanbig.png';
 //import saveAs from 'file-saver';
 
-function AddUser(props) {
+function LoginUser(props) {
 
 //    const [selectedImage, setSelectedImage] = useState(null);    
+
+    let navigate = useNavigate();
 
     const[state, changeState] = useState({
         username: "",
@@ -28,12 +31,13 @@ function AddUser(props) {
             toastr.error(errorArray.join(" and ") + " input(s) are missing information.", "Error");
         } else {
             //console.log(state.image);
-            props.updateUser(state.username, state.password);
-            toastr.success("Your user was added!", "Success");
-            changeState({
-                username: "",
-                fullname: "",
-            });    
+            props.loginUser(state.username, state.password);
+            //toastr.success("Your user was added!", "Success");
+            //changeState({
+            //    username: "",
+            //    fullname: "",
+            //});    
+            navigate('/view');
         }
         console.log(state);
     }    
@@ -105,4 +109,4 @@ function AddUser(props) {
     )
 }
 
-export default AddUser;
+export default LoginUser;

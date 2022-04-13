@@ -10,59 +10,78 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 // icons import
-import { FaHome, FaPenNib, FaBell, FaUser } from "react-icons/fa";
+import { FaHome, FaPenNib, FaBell, FaUser, FaDungeon } from "react-icons/fa";
 // import components
 import Add from './Add';
 import AddUser from './AddUser';
 import View from './view';
+import Amend from './Amend.js';
+import LoginUser from './LoginUser.js'
 
 import ApiClient from './ApiClient.js';
 
 function App() {
 
-  const [socmedpost, changeSocMedPost] = useState([
-    { username: "default", description: "Today the weather has been fantastic, it's been 18 degrees centigrade.", like: 1},
-    { username: "default", description: "This is just another test post to show that it is working", like: 1}    
-  ]);
+  // const [userdetails, changeUserDetails] = useState([
+  //   { username: "keiron", fullname: "keiron goodwin", image: false},
+  //   { username: "amatul", fullname: "amatul qudoos", image: false}
+  // ]);
 
-  const [userdetails, changeUserDetails] = useState([
-    { username: "keiron", fullname: "keiron goodwin", image: false},
-    { username: "amatul", fullname: "amatul qudoos", image: false}
-  ]);
+  const [loggedIn, cLoggedIn] = useState({
+    username: "", 
+    loggedIn: false    
+  });
 
   const updateList = (name, location, datetime, precis, creator) => {    
     const listItem = {name, location, datetime, precis, creator};
     console.log(listItem);
     //localStorage.setItem("list", JSON.stringify([...socmedpost, listItem]));    
     console.log("CreateEvent()", apiClient.createEvent(name, location, datetime, precis, creator));
-    cEventsData((prevState) => [...prevState, listItem]);
+    //cEventsData((prevState) => [...prevState, listItem]);
+    cRefreshData(Math.random()*100);
   }
 
-  const updateUser = (username, fullname, image) => {
-    const userItem = {username, fullname, image};
-    localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
-    changeUserDetails((prevState) => [...prevState, userItem]);
+  const amendList = (id, name, location, datetime, precis, creator) => {    
+    const listItem = {id, name, location, datetime, precis, creator};
+    console.log(listItem);
+    //localStorage.setItem("list", JSON.stringify([...socmedpost, listItem]));    
+    console.log("AmendEvent()", apiClient.amendEvent(id, name, location, datetime, precis, creator));
+    cRefreshData(Math.random()*100);
+    //cEventsData((prevState) => [...prevState, listItem]);
+  }
+
+  const updateUser = (username, password) => {
+    const userItem = {username, password};
+    //localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
+    console.log("AddUser", userItem);
+    //changeUserDetails((prevState) => [...prevState, userItem]);
+    apiClient.addUser(username, password);
+  }
+
+  const loginUser = (username, password) => {
+    const userItem = {username, password};
+    //localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
+    console.log("LoginUser", userItem);
+    //changeUserDetails((prevState) => [...prevState, userItem]);
+    //apiClient.addUser(username, );
+    //cLoggedIn(apiClient.lo)
   }
 
   const apiClient = new ApiClient();
 
-  const updateLikes = (likeIndex) => {
-    const newState = socmedpost.map((current, index) => { 
-      if(index === likeIndex) { 
-        return {username: current.username , description: current.description, like: current.like += 1}
-      } else {
-        return {username: current.username , description: current.description, like: current.like }
-      }
-    });
-    changeSocMedPost(newState);
-    localStorage.setItem("list", JSON.stringify(newState));
-  }
-
   const [eventsData, cEventsData] = useState();
+  const [refreshData, cRefreshData] = useState();
 
   useEffect(() => {
     console.log("eventsData", eventsData);
   }, [eventsData]);
+
+  useEffect(() => {
+    apiClient.getAllEvents()
+    .then((response) => {      
+      cEventsData(response.data);      
+    });
+  }, [refreshData]);
 
   useEffect(() => {
     apiClient.getAllEvents()
@@ -79,7 +98,7 @@ function App() {
     <div>
         <Navbar bg="success" expand="md">
           <Container>
-            <Navbar.Brand href="#home">SocMed</Navbar.Brand>
+            <Navbar.Brand href="#home">Event App</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
@@ -87,6 +106,7 @@ function App() {
                 <Link className="nav-link" to="/view" ><FaBell/></Link>
                 <Link className="nav-link" to="/Add"><FaPenNib/></Link>
                 <Link className="nav-link" to="/AddUser"><FaUser/></Link>
+                <Link className="nav-link" to="/LoginUser"><FaDungeon/></Link>
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -94,7 +114,7 @@ function App() {
         <Container>
           <Routes>
             <Route index element={
-              <View eventsdata = {eventsData} userdetails={userdetails} updateLikes={(index) => updateLikes(index)} />
+              <View eventsdata = {eventsData}/>
             }/> 
             <Route path="/Add" element={
               <Add updateList={
@@ -103,14 +123,20 @@ function App() {
                 }/>
             }/>
             <Route path="/AddUser" element={
-              <AddUser updateUser={
-                (username, fullname, image) => 
-                updateUser(username, fullname, image)
-                }/>
+              <AddUser updateUser={(username, password) => updateUser(username, password)}/>
+            }/>
+            <Route path="/LoginUser" element={
+              <LoginUser loginUser={(username, password) => loginUser(username, password)}/>
             }/>
             <Route path="/view" element={
-              <View eventsdata = {eventsData} userdetails={userdetails} updateLikes={(index) => updateLikes(index)} />
+              <View eventsdata = {eventsData}/>
             }/>                      
+            <Route path="/Amend/:index" element={
+                <Amend eventsdata={eventsData} amendList={
+                  (id, name, location, datetime, precis, creator) => 
+                  amendList(id, name, location, datetime, precis, creator)
+                  }/>
+              }/>       
           </Routes>  
         </Container>
       </div>

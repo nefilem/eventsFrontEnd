@@ -1,41 +1,58 @@
 import React, {useState} from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
 
-function Add(props) {
+function Amend(props) {
+
+    let { index } = useParams();
+    let navigate = useNavigate();
+
+    console.log("Index", index);
+    console.log("Amend Props", props);
 
     const[state, changeState] = useState({
-        name: "",
-        location: "",        
-        precis: "",
-        datetime: "",
-        creator: 0
+        id: props.eventsdata[index]._id,
+        name: props.eventsdata[index].name,
+        location: props.eventsdata[index].location,        
+        precis: props.eventsdata[index].precis,
+        datetime: props.eventsdata[index].datetime,
+        creator: props.eventsdata[index].creator
     });
+
+    console.log("State", state);
 
     const submitHandler = (e) => {
         // console.log("form submitted.");
         e.preventDefault();  
         let errorText = [];
-        if (state.name === null||state.name === "") { errorText.push("Event name"); }
-        if (state.location === null||state.location === "") { errorText.push("Location"); }
-        if (state.datetime === null||state.datetime === "") { errorText.push("Date/Time"); }
-        if (state.precis === null||state.precis === "") { errorText.push("Description"); }
+        if (state.id === null || state.id === ""|| state.id === undefined) { errorText.push("ID"); }
+        if (state.name === null||state.name === ""||state.name === undefined) { errorText.push("Event name"); }
+        if (state.location === null||state.location === ""||state.location === undefined) { errorText.push("Location"); }
+        if (state.datetime === null||state.datetime === ""||state.datetime === undefined) { errorText.push("Date/Time"); }
+        if (state.precis === null||state.precis === ""||state.precis === undefined) { errorText.push("Description"); }
+        if (state.creator === null||state.creator === undefined) { errorText.push("Creator");}
         if (errorText.length>0) { 
             toastr.error(errorText.join(" and ") + " is missing", "Error"); 
         } else {        
-            console.log("pass to updatelist", state.name, state.location, state.datetime, state.precis);
-            props.updateList(state.name, state.location, state.datetime, state.precis, 0);
+            console.log("pass to updatelist", state.id, state.name, state.location, state.datetime, state.precis, state.creator);
+            props.amendList(state.id, state.name, state.location, state.datetime, state.precis, state.creator);
             // 0 above is creator, needs to change for authorisation functionality
             toastr.success("Your post was added!", "Success");
-            changeState({
-                name: "",
-                location: "",
-                datetime: "",
-                precis: "",
-                creator: 0
-            });
+
+            // need to navigate back to the view screen now
+            navigate("/view");
+
+            // changeState({
+            //     name: "",
+            //     location: "",
+            //     datetime: "",
+            //     precis: "",
+            //     creator: 0
+            // });
         }
     }    
 
@@ -115,4 +132,4 @@ function Add(props) {
     )
 }
 
-export default Add;
+export default Amend;
