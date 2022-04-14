@@ -2,7 +2,8 @@ import axios from "axios";
 
 export default class ApiClient {
   
-    baseUrl = "http://localhost:3000";
+    //baseUrl = "http://localhost:3000";
+    baseUrl = "https://kgeventsapi.herokuapp.com";
 
     responseStatusCheck(responseObject) {
         if(responseObject.status >= 200 && responseObject.status < 300){
@@ -57,19 +58,19 @@ export default class ApiClient {
     }
 
     async createEvent(dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.postItems("http://localhost:3000/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.postItems(baseUrl + "/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
     
     async deleteEvent(id) {
-      return this.deleteItems("http://localhost:3000/EventsDB/" + id);
+      return this.deleteItems(baseUrl + "/EventsDB/" + id);
     }
 
     async amendEvent(id, dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.putItems("http://localhost:3000/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.putItems(baseUrl + "/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
 
     async addUser(dUsername, dPassword) {
-        return this.postItems("http://localhost:3000/userInfo/register", {username: dUsername, password: dPassword});
+        return this.postItems(baseUrl + "/userInfo/register", {username: dUsername, password: dPassword});
     }
 
 }
