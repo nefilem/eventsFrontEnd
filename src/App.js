@@ -27,7 +27,8 @@ function App() {
 
   const [loggedIn, cLoggedIn] = useState({
     username: "", 
-    loggedIn: false    
+    loggedIn: false,
+    adminUser: false    
   });
 
   const updateList = (name, location, datetime, precis, creator) => {    
@@ -71,7 +72,7 @@ function App() {
     apiClient.loginUser(username, password)
     .then((response) => {
       if (response.data.loggedIn === true) {
-        cLoggedIn({username: username, loggedIn: response.data.loggedIn});        
+        cLoggedIn({username: username, loggedIn: response.data.loggedIn, adminUser: response.data.adminUser});        
         toastr.success("Login successful, welcome back " + username, "Success");
       } else {
         toastr.error("Username/Password incorrect, please try again.", "Error");

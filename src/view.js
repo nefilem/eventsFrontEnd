@@ -11,10 +11,11 @@ function View(props){
 
   const apiClient = new ApiClient();
 
-  const isHidden = (loggedInUser, EventCreator) => {
+  const isHidden = (loggedInUser, EventCreator, loggedInUserAdmin) => {
     // if users match then we don't want to hide the buttons so return 
     // false, else return true to hide buttons.
-    return (loggedInUser === EventCreator)?false:true
+    //console.log("admin",loggedInUserAdmin);
+    return (loggedInUser === EventCreator)?false:!loggedInUserAdmin
   }
 
   const buildCards = () => {        
@@ -42,8 +43,8 @@ function View(props){
                   </Row>
                 </Col>                                  
                 <Col xs={2} md={2} lg={2} style={{textAlign: "right"}}>                
-                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle" onClick={() => {apiClient.deleteEvent(`${current._id}`); props.refreshD();}}><FaTrash/></Button>                  
-                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle"><Link  to={"/Amend/" + index}><FaEdit/></Link></Button><br/>                  
+                  <Button hidden={isHidden(props.loggedIn.username, current.creator, props.loggedIn.adminUser)} className="iconStyle" onClick={() => {apiClient.deleteEvent(`${current._id}`); props.refreshD();}}><FaTrash/></Button>                  
+                  <Button hidden={isHidden(props.loggedIn.username, current.creator, props.loggedIn.adminUser)} className="iconStyle"><Link  to={"/Amend/" + index}><FaEdit/></Link></Button><br/>                  
                 </Col>
               </Row>              
             </Container>
