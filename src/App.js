@@ -10,7 +10,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 // icons import
-import { FaHome, FaPenNib, FaBell, FaUser, FaDungeon } from "react-icons/fa";
+import { FaHome, FaPenNib, FaBell, FaUser, FaDungeon, FaWalking } from "react-icons/fa";
 // import components
 import Add from './Add';
 import AddUser from './AddUser';
@@ -20,12 +20,10 @@ import LoginUser from './LoginUser.js'
 
 import ApiClient from './ApiClient.js';
 
-function App() {
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
 
-  // const [userdetails, changeUserDetails] = useState([
-  //   { username: "keiron", fullname: "keiron goodwin", image: false},
-  //   { username: "amatul", fullname: "amatul qudoos", image: false}
-  // ]);
+function App() {
 
   const [loggedIn, cLoggedIn] = useState({
     username: "", 
@@ -33,39 +31,55 @@ function App() {
   });
 
   const updateList = (name, location, datetime, precis, creator) => {    
-    const listItem = {name, location, datetime, precis, creator};
-    console.log(listItem);
-    //localStorage.setItem("list", JSON.stringify([...socmedpost, listItem]));    
-    console.log("CreateEvent()", apiClient.createEvent(name, location, datetime, precis, creator));
-    //cEventsData((prevState) => [...prevState, listItem]);
+    //const listItem = {name, location, datetime, precis, creator};
     cRefreshData(Math.random()*100);
   }
 
   const amendList = (id, name, location, datetime, precis, creator) => {    
-    const listItem = {id, name, location, datetime, precis, creator};
-    console.log(listItem);
-    //localStorage.setItem("list", JSON.stringify([...socmedpost, listItem]));    
-    console.log("AmendEvent()", apiClient.amendEvent(id, name, location, datetime, precis, creator));
-    cRefreshData(Math.random()*100);
-    //cEventsData((prevState) => [...prevState, listItem]);
+    //const listItem = {id, name, location, datetime, precis, creator};    
+    cRefreshData(Math.random()*100);    
   }
 
   const updateUser = (username, password) => {
-    const userItem = {username, password};
-    //localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
-    console.log("AddUser", userItem);
-    //changeUserDetails((prevState) => [...prevState, userItem]);
+  //  const userItem = {username, password};
     apiClient.addUser(username, password);
   }
 
   const loginUser = (username, password) => {
-    const userItem = {username, password};
-    //localStorage.setItem("users", JSON.stringify([...userdetails, userItem]));
-    console.log("LoginUser", userItem);
-    //changeUserDetails((prevState) => [...prevState, userItem]);
-    //apiClient.addUser(username, );
-    //cLoggedIn(apiClient.lo)
+    //const userItem = {username, password};    
+
+    toastr.options = {
+      "closeButton": true,
+      "debug": false,
+      "newestOnTop": false,
+      "progressBar": true,
+      "positionClass": "toast-top-right",
+      "preventDuplicates": false,
+      "onclick": null,
+      "showDuration": "2000",
+      "hideDuration": "1000",
+      "timeOut": "5000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "fadeIn",
+      "hideMethod": "fadeOut"
+    }
+ 
+    apiClient.loginUser(username, password)
+    .then((response) => {
+      if (response.data.loggedIn === true) {
+        cLoggedIn({username: username, loggedIn: response.data.loggedIn});        
+        toastr.success("Login successful, welcome back " + username, "Success");
+      } else {
+        toastr.error("Username/Password incorrect, please try again.", "Error");
+      }
+    });    
   }
+
+  const refreshD = () => {
+    cRefreshData(Math.random() * 90);
+  };
 
   const apiClient = new ApiClient();
 
@@ -73,7 +87,10 @@ function App() {
   const [refreshData, cRefreshData] = useState();
 
   useEffect(() => {
-    console.log("eventsData", eventsData);
+
+  }, [loggedIn]);
+
+  useEffect(() => {    
   }, [eventsData]);
 
   useEffect(() => {
@@ -88,12 +105,12 @@ function App() {
     .then((response) => {      
       cEventsData(response.data);      
     });
-    /*const listContents = localStorage.getItem("list");
-    changeSocMedPost(JSON.parse(listContents)||[]);
-    const userContents = localStorage.getItem("users");
-    changeUserDetails(JSON.parse(userContents)||[]);*/
+    
   }, []);
 
+  // removed
+  // <Link className="nav-link" to="/view" ><FaBell/></Link>
+  // from below FaHome line
   return (    
     <div>
         <Navbar bg="success" expand="md">
@@ -102,11 +119,11 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="mr-auto">
-                <Link className="nav-link" to="/" ><FaHome/></Link>
-                <Link className="nav-link" to="/view" ><FaBell/></Link>
-                <Link className="nav-link" to="/Add"><FaPenNib/></Link>
-                <Link className="nav-link" to="/AddUser"><FaUser/></Link>
-                <Link className="nav-link" to="/LoginUser"><FaDungeon/></Link>
+                <Link className="nav-link" to="/" ><FaHome/></Link>                
+                <Link className="nav-link" hidden={!loggedIn.loggedIn} to="/Add"><FaPenNib/></Link>
+                <Link className="nav-link" hidden={loggedIn.loggedIn} to="/AddUser"><FaUser/></Link>
+                <Link className="nav-link" to="/LoginUser" hidden={loggedIn.loggedIn}><FaDungeon/></Link>
+                <div className="nav-link" hidden={!loggedIn.loggedIn} onClick={() => {cLoggedIn({username: "", loggedIn: false})}}><FaWalking/></div>
               </Nav>
             </Navbar.Collapse>
           </Container>
@@ -114,13 +131,13 @@ function App() {
         <Container>
           <Routes>
             <Route index element={
-              <View eventsdata = {eventsData}/>
+              <View eventsdata = {eventsData} loggedIn={loggedIn}/>
             }/> 
             <Route path="/Add" element={
-              <Add updateList={
+              <Add updateList={                
                 (name, location, datetime, precis, creator) => 
-                updateList(name, location, datetime, precis, creator)
-                }/>
+                updateList(name, location, datetime, precis, creator)}
+                loggedIn={loggedIn}/>
             }/>
             <Route path="/AddUser" element={
               <AddUser updateUser={(username, password) => updateUser(username, password)}/>
@@ -129,7 +146,7 @@ function App() {
               <LoginUser loginUser={(username, password) => loginUser(username, password)}/>
             }/>
             <Route path="/view" element={
-              <View eventsdata = {eventsData}/>
+              <View eventsdata = {eventsData} loggedIn={loggedIn} refreshD={() => refreshD()}/>
             }/>                      
             <Route path="/Amend/:index" element={
                 <Amend eventsdata={eventsData} amendList={

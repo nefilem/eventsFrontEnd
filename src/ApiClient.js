@@ -2,11 +2,8 @@ import axios from "axios";
 
 export default class ApiClient {
   
-    //baseUrl = "http://localhost:3000";
-    baseUrl() {
-      return "https://kgeventsapi.herokuapp.com";
-    }
-  
+    baseUrl = "http://localhost:3000";
+
     responseStatusCheck(responseObject) {
         if(responseObject.status >= 200 && responseObject.status < 300){
           return Promise.resolve(responseObject);
@@ -56,23 +53,27 @@ export default class ApiClient {
     }
 
     async getAllEvents() {      
-      return this.getItems("https://kgeventsapi.herokuapp.com/EventsDB");            
+      return this.getItems("http://localhost:3000/EventsDB");            
     }
 
     async createEvent(dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.postItems("https://kgeventsapi.herokuapp.com/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.postItems("http://localhost:3000/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
     
     async deleteEvent(id) {
-      return this.deleteItems("https://kgeventsapi.herokuapp.com/EventsDB/" + id);
+      return this.deleteItems("http://localhost:3000/EventsDB/" + id);
     }
 
     async amendEvent(id, dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.putItems("https://kgeventsapi.herokuapp.com/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.putItems("http://localhost:3000/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
 
     async addUser(dUsername, dPassword) {
-        return this.postItems("https://kgeventsapi.herokuapp.com/userInfo/register", {username: dUsername, password: dPassword});
+        return this.postItems("http://localhost:3000/userInfo/register", {username: dUsername, password: dPassword});
+    }
+
+    async loginUser(dUsername, dPassword) {
+      return this.postItems("http://localhost:3000/userInfo/login", {username: dUsername, password: dPassword});
     }
 
 }

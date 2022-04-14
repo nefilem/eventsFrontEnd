@@ -11,11 +11,10 @@ function Add(props) {
         location: "",        
         precis: "",
         datetime: "",
-        creator: 0
+        creator: props.loggedIn.username
     });
 
     const submitHandler = (e) => {
-        // console.log("form submitted.");
         e.preventDefault();  
         let errorText = [];
         if (state.name === null||state.name === "") { errorText.push("Event name"); }
@@ -25,8 +24,7 @@ function Add(props) {
         if (errorText.length>0) { 
             toastr.error(errorText.join(" and ") + " is missing", "Error"); 
         } else {        
-            console.log("pass to updatelist", state.name, state.location, state.datetime, state.precis);
-            props.updateList(state.name, state.location, state.datetime, state.precis, 0);
+            props.updateList(state.name, state.location, state.datetime, state.precis, props.loggedIn.username);
             // 0 above is creator, needs to change for authorisation functionality
             toastr.success("Your post was added!", "Success");
             changeState({
@@ -34,7 +32,7 @@ function Add(props) {
                 location: "",
                 datetime: "",
                 precis: "",
-                creator: 0
+                creator: props.loggedIn.username
             });
         }
     }    

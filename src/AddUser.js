@@ -1,18 +1,13 @@
 import React, {useState} from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-//import ToggleButton from 'react-bootstrap/ToggleButton';
-//import ButtonGroup from 'react-bootstrap/ButtonGroup';
-//import InputGroup from 'react-bootstrap/InputGroup';
 import toastr from 'toastr';
 import 'toastr/build/toastr.min.css';
-//import manimage from './images/manbig.png';
-//import womanimage from './images/womanbig.png';
-//import saveAs from 'file-saver';
+import { useNavigate } from 'react-router-dom';
 
 function AddUser(props) {
 
-//    const [selectedImage, setSelectedImage] = useState(null);    
+    let navigate = useNavigate();
 
     const[state, changeState] = useState({
         username: "",
@@ -27,15 +22,14 @@ function AddUser(props) {
         if (errorArray.length > 0) {
             toastr.error(errorArray.join(" and ") + " input(s) are missing information.", "Error");
         } else {
-            //console.log(state.image);
             props.updateUser(state.username, state.password);
             toastr.success("Your user was added!", "Success");
             changeState({
                 username: "",
-                fullname: "",
+                password: "",
             });    
-        }
-        console.log(state);
+            navigate('/LoginUser');
+        }            
     }    
 
     toastr.options = {
@@ -81,6 +75,7 @@ function AddUser(props) {
     }
     return(
     <>
+        Create User
         <div className="container cardBody">
             <Form onSubmit={(e) => submitHandler(e) }>
                 <Form.Group controlId="username">
@@ -92,13 +87,13 @@ function AddUser(props) {
                       onFocus={(e) => e.target.select()}/>
                 </Form.Group>
                 <Form.Group controlId="password">
-                    <Form.Label>Full Name</Form.Label>
+                    <Form.Label>Password</Form.Label>
                      <Form.Control name="password"
                       type="text" 
                       value={state.password} 
                       onChange={(e) => handleChange(e)}/>
                 </Form.Group>                          
-                <Button variant="success" type="submit">Submit</Button>
+                <Button variant="success" type="submit">Create User</Button>
             </Form>
         </div>
     </>

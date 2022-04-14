@@ -29,17 +29,10 @@ function LoginUser(props) {
         if (state.password === null||state.password === "") { errorArray.push("Password"); }
         if (errorArray.length > 0) {
             toastr.error(errorArray.join(" and ") + " input(s) are missing information.", "Error");
-        } else {
-            //console.log(state.image);
-            props.loginUser(state.username, state.password);
-            //toastr.success("Your user was added!", "Success");
-            //changeState({
-            //    username: "",
-            //    fullname: "",
-            //});    
+        } else {            
+            props.loginUser(state.username, state.password);            
             navigate('/view');
         }
-        console.log(state);
     }    
 
     toastr.options = {
@@ -86,6 +79,7 @@ function LoginUser(props) {
     return(
     <>
         <div className="container cardBody">
+            Login
             <Form onSubmit={(e) => submitHandler(e) }>
                 <Form.Group controlId="username">
                     <Form.Label>UserName</Form.Label>
@@ -96,13 +90,13 @@ function LoginUser(props) {
                       onFocus={(e) => e.target.select()}/>
                 </Form.Group>
                 <Form.Group controlId="password">
-                    <Form.Label>Full Name</Form.Label>
+                    <Form.Label>Password</Form.Label>
                      <Form.Control name="password"
                       type="text" 
                       value={state.password} 
                       onChange={(e) => handleChange(e)}/>
                 </Form.Group>                          
-                <Button variant="success" type="submit">Submit</Button>
+                <Button variant="success" type="submit">Login</Button>
             </Form>
         </div>
     </>

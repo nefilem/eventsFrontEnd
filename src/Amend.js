@@ -11,9 +11,6 @@ function Amend(props) {
     let { index } = useParams();
     let navigate = useNavigate();
 
-    console.log("Index", index);
-    console.log("Amend Props", props);
-
     const[state, changeState] = useState({
         id: props.eventsdata[index]._id,
         name: props.eventsdata[index].name,
@@ -23,10 +20,7 @@ function Amend(props) {
         creator: props.eventsdata[index].creator
     });
 
-    console.log("State", state);
-
     const submitHandler = (e) => {
-        // console.log("form submitted.");
         e.preventDefault();  
         let errorText = [];
         if (state.id === null || state.id === ""|| state.id === undefined) { errorText.push("ID"); }
@@ -38,21 +32,12 @@ function Amend(props) {
         if (errorText.length>0) { 
             toastr.error(errorText.join(" and ") + " is missing", "Error"); 
         } else {        
-            console.log("pass to updatelist", state.id, state.name, state.location, state.datetime, state.precis, state.creator);
             props.amendList(state.id, state.name, state.location, state.datetime, state.precis, state.creator);
             // 0 above is creator, needs to change for authorisation functionality
             toastr.success("Your post was added!", "Success");
 
             // need to navigate back to the view screen now
             navigate("/view");
-
-            // changeState({
-            //     name: "",
-            //     location: "",
-            //     datetime: "",
-            //     precis: "",
-            //     creator: 0
-            // });
         }
     }    
 
