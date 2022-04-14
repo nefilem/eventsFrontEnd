@@ -29,20 +29,21 @@ function View(props){
       <>
       <br/>
       <div className="container cardMain">        
-          <Card style={{background: "black", color: "white"}}>
-            <Container style={{background: "black", color: "white"}}>
-              <Row style={{background: "black", color: "white"}}>
-                <Col xs={10} md={10} lg={10} style={{background: "black", color: "white"}}>
-                  <Row style={{background: "black", color: "white"}} className="headerRow">
+          <Card>
+            <Container>
+              <Row className="view">
+                <Col xs={10} md={10} lg={10}>
+                  <Row className="headerRow">
                     {current.name} - {current.location} - {current.datetime}
                   </Row>
-                  <Row style={{background: "black", color: "white"}} className="bodyRow">
+                  <div className="underline"></div>
+                  <Row className="bodyRow">
                     {current.precis}                                
                   </Row>
                 </Col>                                  
-                <Col xs={2} md={2} lg={2} style={{background: "black", color: "white", textAlign: "right"}}>                
-                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle" onClick={() => {apiClient.deleteEvent(`${current._id}`); props.refreshD();}}><FaTrash/></Button><br/>                  
-                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle"><Link style={{color: "black"}} className="nav-link" to={"/Amend/" + index}><FaEdit/></Link></Button><br/>                  
+                <Col xs={2} md={2} lg={2} style={{textAlign: "right"}}>                
+                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle" onClick={() => {apiClient.deleteEvent(`${current._id}`); props.refreshD();}}><FaTrash/></Button>                  
+                  <Button hidden={isHidden(props.loggedIn.username, current.creator)} className="iconStyle"><Link  to={"/Amend/" + index}><FaEdit/></Link></Button><br/>                  
                 </Col>
               </Row>              
             </Container>

@@ -32,11 +32,13 @@ function App() {
 
   const updateList = (name, location, datetime, precis, creator) => {    
     //const listItem = {name, location, datetime, precis, creator};
+    apiClient.createEvent(name, location, datetime, precis, creator);
     cRefreshData(Math.random()*100);
   }
 
   const amendList = (id, name, location, datetime, precis, creator) => {    
     //const listItem = {id, name, location, datetime, precis, creator};    
+    apiClient.amendEvent(id, name, location, datetime, precis, creator);
     cRefreshData(Math.random()*100);    
   }
 
@@ -87,7 +89,6 @@ function App() {
   const [refreshData, cRefreshData] = useState();
 
   useEffect(() => {
-
   }, [loggedIn]);
 
   useEffect(() => {    
@@ -112,7 +113,7 @@ function App() {
   // <Link className="nav-link" to="/view" ><FaBell/></Link>
   // from below FaHome line
   return (    
-    <div>
+    <div className="container-1">
         <Navbar bg="success" expand="md">
           <Container>
             <Navbar.Brand href="#home">Event App</Navbar.Brand>
@@ -128,6 +129,7 @@ function App() {
             </Navbar.Collapse>
           </Container>
         </Navbar>
+        <div className="container-2">
         <Container>
           <Routes>
             <Route index element={
@@ -156,6 +158,7 @@ function App() {
               }/>       
           </Routes>  
         </Container>
+        </div>
       </div>
   );
 }
