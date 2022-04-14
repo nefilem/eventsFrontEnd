@@ -56,23 +56,23 @@ export default class ApiClient {
     }
 
     async getAllEvents() {      
-      return this.getItems(baseUrl() + "/EventsDB");            
+      return this.getItems("https://kgeventsapi.herokuapp.com/EventsDB");            
     }
 
     async createEvent(dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.postItems(baseUrl() + "/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.postItems("https://kgeventsapi.herokuapp.com/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
     
     async deleteEvent(id) {
-      return this.deleteItems(baseUrl() + "/EventsDB/" + id);
+      return this.deleteItems("https://kgeventsapi.herokuapp.com/EventsDB/" + id);
     }
 
     async amendEvent(id, dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.putItems(baseUrl() + "/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.putItems("https://kgeventsapi.herokuapp.com/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
 
     async addUser(dUsername, dPassword) {
-        return this.postItems(baseUrl() + "/userInfo/register", {username: dUsername, password: dPassword});
+        return this.postItems("https://kgeventsapi.herokuapp.com/userInfo/register", {username: dUsername, password: dPassword});
     }
 
 }
