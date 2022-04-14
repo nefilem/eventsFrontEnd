@@ -56,23 +56,23 @@ export default class ApiClient {
     }
 
     async getAllEvents() {      
-      return this.getItems(baseUrl + "/EventsDB");            
+      return this.getItems(baseUrl() + "/EventsDB");            
     }
 
     async createEvent(dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.postItems(baseUrl + "/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.postItems(baseUrl() + "/EventsDB/create", {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
     
     async deleteEvent(id) {
-      return this.deleteItems(baseUrl + "/EventsDB/" + id);
+      return this.deleteItems(baseUrl() + "/EventsDB/" + id);
     }
 
     async amendEvent(id, dName, dLocation, dDatetime, dPrecis, dCreator) {
-      return this.putItems(baseUrl + "/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
+      return this.putItems(baseUrl() + "/EventsDB/" + id,  {name: dName, location: dLocation, datetime: dDatetime, precis: dPrecis, creator: dCreator});
     }
 
     async addUser(dUsername, dPassword) {
-        return this.postItems(baseUrl + "/userInfo/register", {username: dUsername, password: dPassword});
+        return this.postItems(baseUrl() + "/userInfo/register", {username: dUsername, password: dPassword});
     }
 
 }
