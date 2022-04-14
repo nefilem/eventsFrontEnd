@@ -54,7 +54,7 @@ export default class ApiClient {
     }
 
     async getAllEvents() {      
-      return this.getItems("http://localhost:3000/EventsDB");            
+      return this.getItems(baseUrl + "/EventsDB");            
     }
 
     async createEvent(dName, dLocation, dDatetime, dPrecis, dCreator) {
