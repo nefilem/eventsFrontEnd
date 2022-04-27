@@ -2,7 +2,8 @@ import axios from "axios";
 
 export default class ApiClient {
   
-    baseUrl = "http://localhost:3000";
+    //baseUrl = "http://localhost:3000";
+    baseUrl = "http://kgeventsapi.herokuapp.com";
 
     responseStatusCheck(responseObject) {
         if(responseObject.status >= 200 && responseObject.status < 300){
